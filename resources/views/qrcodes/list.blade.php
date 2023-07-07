@@ -14,6 +14,7 @@
             <th>NOME</th>
             <th>DESCRIÇÃO</th>
             <th>CONTEUDO</th>
+            <th>QRCODE</th>
             <th>AÇÕES</th>
             <th></th>
             <th></th>
@@ -24,6 +25,14 @@
                 <td>{{ $qrcode->titulo }}</td>
                 <td>{{ $qrcode->descricao }}</td>
                 <td>{{ $qrcode->conteudo }}</td>
+                <td>
+                    <a href="{{ url("storage/qrcodes/{$qrcode->id}.png") }}">
+                        tesste
+                    </a>
+                    <a href="{{ url("storage/{$qrcode->logo}") }}">
+                        tesste
+                    </a>
+                </td>
                 <td><a href="{{ route('qrcodes.show',['qrcode' => $qrcode->id ]) }}">VER</a></td>
                 <td><a href="{{ route('qrcodes.edit',['qrcode' => $qrcode->id ]) }}">EDITAR</a></td>
                 <td>
@@ -35,6 +44,7 @@
                 </td>
             </tr>
         @endforeach
+        {{-- <img src="data:image/png;base64, {!! base64_encode(QrCode::format('png')->size(800)->generate('Make me into an QrCode!')) !!} "> --}}
     </table>
 </body>
 </html>

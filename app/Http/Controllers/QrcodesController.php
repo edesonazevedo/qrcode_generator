@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Qrcodes;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class QrcodesController extends Controller
 {
@@ -12,6 +14,8 @@ class QrcodesController extends Controller
      */
     public function index()
     {
+        // QrCode::format('png')->size('300')->generate('Make me into a QrCode!',storage_path('qr.png'));
+        // QrCode::format('png')->size('300')->generate($qrcode->conteudo,storage_path()."/app/public/qrcodes/".$qrcode->id.".png" );
         $qrcodes = Qrcodes::all();
         return view('qrcodes.list',['qrcodes' => $qrcodes]);
     }
@@ -29,11 +33,26 @@ class QrcodesController extends Controller
      */
     public function store(Request $request)
     {
+        // var_dump($request->file('logo'));
+        // $request->file('logo')->store('imagens');
+        // return "arquivo salvo";
+
+     
+
         $qrcode = new Qrcodes();
         $qrcode->titulo = $request->titulo;
         $qrcode->descricao = $request->descricao;
         $qrcode->conteudo = $request->conteudo;
+        $qrcode->logo = $request->logo->store('imagens');
         $qrcode->save();
+        if(!$qrcode->save()) {
+            return "falha ao gerar qr";
+        }
+        
+        $logo = "/public/storage/".$qrcode->logo;
+        $dirQrcode = storage_path()."/app/public/qrcodes/".$qrcode->id.".png";
+        
+        QrCode::format('png')->size('300')->merge($logo)->generate($qrcode->conteudo,$dirQrcode);
         return redirect()->route('qrcodes.index');
     }
 

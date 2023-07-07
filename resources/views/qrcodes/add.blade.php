@@ -7,7 +7,7 @@
     <title>Cadastro de Qrcodes</title>
 </head>
 <body>
-    <form action="{{ route('qrcodes.store') }}" method="POST">
+    <form action="{{ route('qrcodes.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
         <label for="titulo">Titulo:</label>
         <input type="text" name="titulo" id="titulo"><br>
@@ -15,6 +15,8 @@
         <input type="text" name="descricao" id="descricao"><br>
         <label for="conteudo">Conteudo:</label>
         <textarea name="conteudo" id="conteudo" cols="30" rows="10"></textarea><br>
+        <label for="logo">Logo:</label>
+        <input type="file" name="logo" id="logo"><br>
         <input type="submit" value="Salvar">
     </form>
     <a href="{{ route('qrcodes.index') }}">Voltar</a>
