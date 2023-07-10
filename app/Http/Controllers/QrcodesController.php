@@ -6,7 +6,7 @@ use App\Models\Qrcodes;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
-
+use PDF;
 class QrcodesController extends Controller
 {
     /**
@@ -16,6 +16,9 @@ class QrcodesController extends Controller
     {
         // QrCode::format('png')->size('300')->generate('Make me into a QrCode!',storage_path('qr.png'));
         // QrCode::format('png')->size('300')->generate($qrcode->conteudo,storage_path()."/app/public/qrcodes/".$qrcode->id.".png" );
+
+
+
         $qrcodes = Qrcodes::all();
         return view('qrcodes.list',['qrcodes' => $qrcodes]);
     }
@@ -37,22 +40,23 @@ class QrcodesController extends Controller
         // $request->file('logo')->store('imagens');
         // return "arquivo salvo";
 
-     
+
 
         $qrcode = new Qrcodes();
         $qrcode->titulo = $request->titulo;
+        $qrcode->tipo = $request->tipo;
         $qrcode->descricao = $request->descricao;
         $qrcode->conteudo = $request->conteudo;
-        $qrcode->logo = $request->logo->store('imagens');
+        $qrcode->logo = $request->logo->store('imagens','public');
         $qrcode->save();
         if(!$qrcode->save()) {
             return "falha ao gerar qr";
         }
-        
-        $logo = "/public/storage/".$qrcode->logo;
+
+        $dirLogo = "/public/storage/".$qrcode->logo;
         $dirQrcode = storage_path()."/app/public/qrcodes/".$qrcode->id.".png";
-        
-        QrCode::format('png')->size('300')->merge($logo)->generate($qrcode->conteudo,$dirQrcode);
+
+        QrCode::format('png')->size('300')->merge($dirLogo)->generate($qrcode->conteudo,$dirQrcode);
         return redirect()->route('qrcodes.index');
     }
 
@@ -61,7 +65,9 @@ class QrcodesController extends Controller
      */
     public function show(Qrcodes $qrcode)
     {
-        return view('qrcodes.view',['qrcode' => $qrcode]);
+        // return view('qrcodes.view',['qrcode' => $qrcode]);
+        $pdf = PDF::loadView('pdf',compact('qrcode'));
+        return $pdf->setPaper('a4')->stream('qrcode');
     }
 
     /**
@@ -78,6 +84,7 @@ class QrcodesController extends Controller
     public function update(Request $request, Qrcodes $qrcode)
     {
         $qrcode->titulo = $request->titulo;
+        $qrcode->tipo = $request->tipo;
         $qrcode->descricao = $request->descricao;
         $qrcode->conteudo = $request->conteudo;
         $qrcode->update();
