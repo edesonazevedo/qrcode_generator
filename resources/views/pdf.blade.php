@@ -7,17 +7,17 @@
     <title>pdf</title>
     <link rel="stylesheet" href="{{ asset('css/style_pdf.css') }}" >
 </head>
-<body>
+<body style="background-image: url({{ asset("storage/{$qrcode->background}"); }});background-size: 100%;">
     {{-- <h1>PDF GERADO COM SUCESSO</h1> --}}
 
     <div id="header">
-        <p style="padding-top: 20% ">{{ $qrcode->titulo }}</p>
+        {{-- <img style="padding-top: 5%;" src="{{ asset('img/logo.png') }}" /> --}}
     </div>
     <div id="body">
         <img style="padding-top: 5% " src="{{ asset("storage/qrcodes/{$qrcode->id}.png") }}" alt="">
     </div>
     <div id="footer">
-        <p style="padding-top: 20% ">{{ $qrcode->descricao }}</p>
+        {{-- <p style="padding-top: 20%;color:yellow">{{ $qrcode->descricao }}</p> --}}
     </div>
 </body>
 </html>

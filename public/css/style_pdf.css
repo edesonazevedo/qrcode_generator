@@ -8,13 +8,13 @@
 }
 body {
     margin: 0 auto;
-    background: green;
+    background: #024221;
 }
 
 #header {
     /* background-color: yellow; */
     /* border: solid; */
-    height: 32%;
+    height: 30%;
     text-align: center;
 
 }
@@ -28,5 +28,6 @@ body {
     /* background-color: aquamarine; */
     /* border: solid; */
     height: 33%;
+    font-size: 60px;
     text-align: center;
 }
